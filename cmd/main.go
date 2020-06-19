@@ -17,7 +17,7 @@ func main() {
 		Name:        "jf",
 		Usage:       "JSONFind",
 		UsageText:   "jf <valueToFind> <jsonFile>",
-		Version:     "0.0.1",
+		Version:     "1.0.0",
 		Description: "Search a JSON file for a specified value and output full paths of each occurrence found",
 		Action:      doSearch,
 	}
