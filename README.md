@@ -1,6 +1,6 @@
 # JSONFind
 
-Easily find paths to values in large JSON files.
+A fast and lightweight utility to easily find paths to values in large JSON files.
 
 ### Usage
 
