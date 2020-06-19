@@ -9,3 +9,7 @@ A fast and lightweight utility to easily find paths to values in large JSON file
 ![usage](./assets/usage.png)
 
 ![help](./assets/help.png)
+
+---
+
+Bugs likely exist so issues/pull requests are welcomed!
