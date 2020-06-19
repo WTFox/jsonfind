@@ -3,6 +3,7 @@ package scout
 import (
 	"encoding/json"
 	"reflect"
+	"sort"
 	"testing"
 
 	"github.com/matryer/is"
@@ -30,11 +31,12 @@ func TestScout(t *testing.T) {
 		s := New("c", parsedData)
 		s.DoSearch()
 		found := s.Found()
+		sort.Strings(found)
 
 		is.Equal(len(found), 2)
+
 		is.Equal(found[0], ".a.b.0")
 		is.Equal(found[1], ".baz")
-
 	})
 }
 
