@@ -1,5 +1,9 @@
-module github.com/wtfox/jsonfind
+module jsonfind
 
 go 1.14
 
-require github.com/matryer/is v1.3.0
+require (
+	github.com/matryer/is v1.3.0
+	github.com/urfave/cli v1.22.4
+	github.com/urfave/cli/v2 v2.2.0
+)
