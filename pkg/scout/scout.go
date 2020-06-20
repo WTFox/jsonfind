@@ -20,7 +20,7 @@ func (s *Scout) DoSearch() ([]string, error) {
 	case map[string]interface{}:
 		s.parseMap(val, "")
 	default:
-		fmt.Errorf("could not parse JSON structure")
+		return []string{}, fmt.Errorf("could not parse JSON structure")
 	}
 	return s.found, nil
 }
