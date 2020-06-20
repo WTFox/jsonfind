@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 
 	"jsonfind/pkg/scout"
@@ -13,39 +12,42 @@ import (
 )
 
 func main() {
+
 	app := &cli.App{
 		Name:        "jf",
 		Usage:       "JSONFind",
 		UsageText:   "jf <valueToFind> <jsonFile>",
-		Version:     "1.0.0",
+		Version:     "1.0.1",
 		Description: "Search a JSON file for a specified value and output full paths of each occurrence found",
 		Action:      doSearch,
 	}
 
 	if err := app.Run(os.Args); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 }
 
 func doSearch(c *cli.Context) error {
+	if c.NArg() != 2 {
+		cli.ShowAppHelpAndExit(c, 1)
+	}
 	lookingFor := c.Args().Get(0)
 	filename := c.Args().Get(1)
 
 	bytes, err := readFile(filename)
 	if err != nil {
-		log.Fatalf("Couldn't read file %s\n%v", filename, err)
+		return fmt.Errorf("couldn't read file %s\n%v", filename, err)
 	}
 
 	var result map[string]interface{}
 	if err = json.Unmarshal(bytes, &result); err != nil {
-		fmt.Printf("%v\n\nExplanation: JF was unable to parse the JSON file, jf only supports JSON object at the root level for now. (e.g. {})?\n", err)
-		os.Exit(1)
+		return fmt.Errorf("%v\n\nExplanation: jf was unable to parse the JSON file, jf only supports JSON object at the root level for now. (e.g. {})", err)
 	}
 
 	scout := scout.New(lookingFor, result)
-	scout.DoSearch()
+	found := scout.DoSearch()
 
-	for _, occurrence := range scout.Found() {
+	for _, occurrence := range found {
 		fmt.Println(occurrence)
 	}
 

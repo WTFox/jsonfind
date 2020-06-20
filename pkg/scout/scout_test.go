@@ -20,21 +20,18 @@ func TestScout(t *testing.T) {
 
 	t.Run("finds single values", func(t *testing.T) {
 		s := New("bar", parsedData)
-		s.DoSearch()
+		found := s.DoSearch()
 
-		found := s.Found()
 		is.Equal(len(found), 1)
-		is.Equal(s.Found()[0], ".foo")
+		is.Equal(found[0], ".foo")
 	})
 
 	t.Run("finds multiple values", func(t *testing.T) {
 		s := New("c", parsedData)
-		s.DoSearch()
-		found := s.Found()
+		found := s.DoSearch()
 		sort.Strings(found)
 
 		is.Equal(len(found), 2)
-
 		is.Equal(found[0], ".a.b.0")
 		is.Equal(found[1], ".baz")
 	})
