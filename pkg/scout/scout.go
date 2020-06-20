@@ -6,21 +6,27 @@ import (
 
 // Scout is the main type that handles the traversing of JSON paths.
 type Scout struct {
-	data       map[string]interface{}
+	data       interface{}
 	found      []string
 	lookingFor string
 }
 
 // DoSearch searches the parsed JSON and returns an array of strings that correspond to
 // found locations.
-func (s *Scout) DoSearch() []string {
-	var path string
-	s.parseMap(s.data, path)
-	return s.found
+func (s *Scout) DoSearch() ([]string, error) {
+	switch val := s.data.(type) {
+	case []interface{}:
+		s.parseArray(val, "")
+	case map[string]interface{}:
+		s.parseMap(val, "")
+	default:
+		fmt.Errorf("could not parse JSON structure")
+	}
+	return s.found, nil
 }
 
 // New instantiates and returns a Scout
-func New(lookingFor string, target map[string]interface{}) Scout {
+func New(lookingFor string, target interface{}) Scout {
 	return Scout{
 		data:       target,
 		lookingFor: lookingFor,

@@ -31,6 +31,7 @@ func doSearch(c *cli.Context) error {
 	if c.NArg() != 2 {
 		cli.ShowAppHelpAndExit(c, 1)
 	}
+
 	lookingFor := c.Args().Get(0)
 	filename := c.Args().Get(1)
 
@@ -39,13 +40,16 @@ func doSearch(c *cli.Context) error {
 		return fmt.Errorf("couldn't read file %s\n%v", filename, err)
 	}
 
-	var result map[string]interface{}
+	var result interface{}
 	if err = json.Unmarshal(bytes, &result); err != nil {
-		return fmt.Errorf("%v\n\nExplanation: jf was unable to parse the JSON file, jf only supports JSON object at the root level for now. (e.g. {})", err)
+		return fmt.Errorf("%v\njf was unable to parse the JSON file", err)
 	}
 
 	scout := scout.New(lookingFor, result)
-	found := scout.DoSearch()
+	found, err := scout.DoSearch()
+	if err != nil {
+		return err
+	}
 
 	for _, occurrence := range found {
 		fmt.Println(occurrence)
