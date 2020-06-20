@@ -1,2 +1,9 @@
+# macOS stuff
 .DS_Store
+
+# Binaries
 bin/
+
+# Test files
+array.json
+map.json
