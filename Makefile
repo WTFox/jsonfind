@@ -4,7 +4,7 @@ LINUX=$(EXECUTABLE)_linux_amd64
 DARWIN=$(EXECUTABLE)_darwin_amd64
 VERSION=$(shell git describe --tags --always --long --dirty)
 
-.PHONY: all test clean
+.PHONY: all test clean build
 
 all: test build ## Build and run tests
 
@@ -21,13 +21,13 @@ linux: $(LINUX) ## Build for Linux
 darwin: $(DARWIN) ## Build for Darwin (macOS)
 
 $(WINDOWS):
-	env GOOS=windows GOARCH=amd64 go build -i -v -o $(WINDOWS) -ldflags="-s -w -X main.version=$(VERSION)"  ./cmd/jf/main.go
+	env GOOS=windows GOARCH=amd64 go build -v -o $(WINDOWS) -ldflags="-s -w -X main.version=$(VERSION)"  ./cmd/jf/main.go
 
 $(LINUX):
-	env GOOS=linux GOARCH=amd64 go build -i -v -o $(LINUX) -ldflags="-s -w -X main.version=$(VERSION)"  ./cmd/jf/main.go
+	env GOOS=linux GOARCH=amd64 go build -v -o $(LINUX) -ldflags="-s -w -X main.version=$(VERSION)"  ./cmd/jf/main.go
 
 $(DARWIN):
-	env GOOS=darwin GOARCH=amd64 go build -i -v -o $(DARWIN) -ldflags="-s -w -X main.version=$(VERSION)"  ./cmd/jf/main.go
+	env GOOS=darwin GOARCH=amd64 go build -v -o $(DARWIN) -ldflags="-s -w -X main.version=$(VERSION)"  ./cmd/jf/main.go
 
 clean: ## Remove previous build
 	rm -f $(WINDOWS) $(LINUX) $(DARWIN)

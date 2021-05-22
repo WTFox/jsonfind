@@ -52,7 +52,10 @@ func (s *Scout) parseMap(data map[string]interface{}, path string) {
 
 func (s *Scout) parseArray(anArray []interface{}, path string) {
 	for idx, val := range anArray {
-		keyPath := fmt.Sprintf("%s.%d", path, idx)
+		if path == "" {
+			path = "."
+		}
+		keyPath := fmt.Sprintf("%s[%d]", path, idx)
 		switch valData := val.(type) {
 		case map[string]interface{}:
 			s.parseMap(val.(map[string]interface{}), keyPath)

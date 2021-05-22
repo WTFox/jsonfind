@@ -23,7 +23,7 @@ func TestScoutWithArray(t *testing.T) {
 		is.NoErr(err)
 
 		is.Equal(len(found), 1)
-		is.Equal(found[0], ".0.foo")
+		is.Equal(found[0], ".[0].foo")
 	})
 
 	t.Run("finds multiple values", func(t *testing.T) {
@@ -33,8 +33,8 @@ func TestScoutWithArray(t *testing.T) {
 		sort.Strings(found)
 
 		is.Equal(len(found), 2)
-		is.Equal(found[0], ".0.a.b.0")
-		is.Equal(found[1], ".0.baz")
+		is.Equal(found[0], ".[0].a.b[0]")
+		is.Equal(found[1], ".[0].baz")
 	})
 }
 
@@ -62,7 +62,7 @@ func TestScoutWithMapping(t *testing.T) {
 		sort.Strings(found)
 
 		is.Equal(len(found), 2)
-		is.Equal(found[0], ".a.b.0")
+		is.Equal(found[0], ".a.b[0]")
 		is.Equal(found[1], ".baz")
 	})
 }
