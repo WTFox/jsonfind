@@ -5,8 +5,6 @@ builds:
   - env:
       - CGO_ENABLED=0
     main: ./cmd/jf/main.go
-    flags:
-      - -o="#{bin}/jf"
     goos:
       - linux
       - windows
@@ -49,4 +47,4 @@ brews:
       system "#{bin}/jf --help"
 
     install: |
-      bin.install "jf"
+      bin.install "jsonfind" => "jf"
