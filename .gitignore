@@ -7,3 +7,4 @@ bin/
 # Test files
 array.json
 map.json
+dist/
