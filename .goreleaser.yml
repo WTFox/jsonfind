@@ -1,13 +1,12 @@
-# This is an example .goreleaser.yml file with some sane defaults.
-# Make sure to check the documentation at http://goreleaser.com
 before:
   hooks:
-    # You may remove this if you don't use go modules.
     - go mod tidy
 builds:
   - env:
       - CGO_ENABLED=0
     main: ./cmd/jf/main.go
+    flags:
+      - -o="#{bin}/jf"
     goos:
       - linux
       - windows
@@ -31,90 +30,23 @@ changelog:
       - '^test:'
 brews:
   -
-    # NOTE: make sure the url_template, the token and given repo (github or gitlab) owner and name are from the
-    # same kind. We will probably unify this in the next major version like it is done with scoop.
-
-    # GitHub/GitLab repository to push the formula to
-    # Gitea is not supported yet, but the support coming
     tap:
       owner: WTFox
       name: homebrew-tap
-      # Optionally a token can be provided, if it differs from the token provided to GoReleaser
-      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
-
-    # Allows you to add a custom require_relative at the top of the formula template
-    # Default is empty
-    custom_require: custom_download_strategy
-
-    # Git author used to commit to the repository.
-    # Defaults are shown.
     commit_author:
       name: A. Fox
       email: anthonyfox1988@gmail.com
 
-    # Folder inside the repository to put the formula.
-    # Default is the root folder.
     folder: Formula
 
-    # Your app's homepage.
-    # Default is empty.
     homepage: "https://afox.dev/posts/jsonfind"
 
-    # Your app's description.
-    # Default is empty.
-    description: ""
+    description: "jf prints out dotted paths to the given value for a given json file"
 
-    # SPDX identifier of your app's license.
-    # Default is empty.
     license: "MIT"
 
-    # Setting this will prevent goreleaser to actually try to commit the updated
-    # formula - instead, the formula file will be stored on the dist folder only,
-    # leaving the responsibility of publishing it to the user.
-    # If set to auto, the release will not be uploaded to the homebrew tap
-    # in case there is an indicator for prerelease in the tag e.g. v1.0.0-rc1
-    # Default is false.
-    # skip_upload: true
-
-    # # Custom block for brew.
-    # # Can be used to specify alternate downloads for devel or head releases.
-    # # Default is empty.
-    # custom_block: |
-    #   head "https://github.com/some/package.git"
-    #   ...
-
-    # # Packages your package depends on.
-    # dependencies:
-    #   - name: git
-    #   - name: zsh
-    #     type: optional
-
-    # Packages that conflict with your package.
-    # conflicts:
-    #   - svn
-    #   - bash
-
-    # Specify for packages that run as a service.
-    # Default is empty.
-    # plist: |
-    #   <?xml version="1.0" encoding="UTF-8"?>
-    #   ...
-
-    # So you can `brew test` your formula.
-    # Default is empty.
     test: |
       system "#{bin}/jf --help"
-      ...
 
-    # Custom install script for brew.
-    # Default is 'bin.install "program"'.
     install: |
       bin.install "jf"
-      ...
-
-    # Custom post_install script for brew.
-    # Could be used to do any additional work after the "install" script
-    # Default is empty.
-    # post_install: |
-    #     etc.install "app-config.conf"
-    #     ...
