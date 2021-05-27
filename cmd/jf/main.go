@@ -5,21 +5,30 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 
 	"jsonfind/pkg/scout"
 
 	"github.com/urfave/cli/v2"
 )
 
-func main() {
+const flagParentPaths = "parent-paths"
 
+func main() {
 	app := &cli.App{
 		Name:        "jf",
 		Usage:       "JSONFind",
 		UsageText:   "jf <valueToFind> <jsonFile>",
-		Version:     "1.0.2",
+		Version:     "1.0.3",
 		Description: "Search a JSON file for a specified value and output full paths of each occurrence found",
 		Action:      doSearch,
+		Flags: []cli.Flag{
+			&cli.BoolFlag{
+				Name:    flagParentPaths,
+				Usage:   "Renders the parent paths only",
+				Aliases: []string{"p"},
+			},
+		},
 	}
 
 	if err := app.Run(os.Args); err != nil {
@@ -52,14 +61,37 @@ func doSearch(c *cli.Context) error {
 	}
 
 	for _, occurrence := range found {
-		fmt.Println(occurrence)
+		if c.Bool(flagParentPaths) {
+			fmt.Println(splitToParentPath(occurrence))
+		} else {
+			fmt.Println(occurrence)
+		}
 	}
 
 	return nil
 }
 
+func splitToParentPath(path string) string {
+	pathElements := strings.Split(path, ".")
+	if len(pathElements) > 0 && len(pathElements) < 3 {
+		return "."
+	}
+
+	lastElement := pathElements[len(pathElements)-1]
+	if len(lastElement) > 0 && lastElement[len(lastElement)-1] == ']' {
+		lastElement = strings.Split(lastElement, "[")[0]
+		pathElements = append(pathElements[:len(pathElements)-1], lastElement)
+		return strings.Join(pathElements, ".")
+	}
+
+	return strings.Join(pathElements[:len(pathElements)-1], ".")
+}
+
 func readFile(filepath string) ([]byte, error) {
 	jsonFile, err := os.Open(filepath)
+	if err != nil {
+		return nil, err
+	}
 	defer jsonFile.Close()
 	if err != nil {
 		return []byte{}, err
