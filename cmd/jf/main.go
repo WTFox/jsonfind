@@ -13,6 +13,7 @@ import (
 )
 
 const flagParentPaths = "parent-paths"
+const flagFirstOnly = "first-only"
 
 func main() {
 	app := &cli.App{
@@ -27,6 +28,11 @@ func main() {
 				Name:    flagParentPaths,
 				Usage:   "Renders the parent paths only",
 				Aliases: []string{"p"},
+			},
+			&cli.BoolFlag{
+				Name:    flagFirstOnly,
+				Usage:   "Returns the first occurrence only",
+				Aliases: []string{"f"},
 			},
 		},
 	}
@@ -65,6 +71,9 @@ func doSearch(c *cli.Context) error {
 			fmt.Println(splitToParentPath(occurrence))
 		} else {
 			fmt.Println(occurrence)
+		}
+		if c.Bool(flagFirstOnly) {
+			return nil
 		}
 	}
 
