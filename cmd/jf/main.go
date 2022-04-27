@@ -57,7 +57,7 @@ func entrypoint(c *cli.Context) error {
 	lookingFor := c.Args().Get(0)
 	filename := c.Args().Get(1)
 
-	bytes, err := readFile(filename)
+	bytes, err := readInput(filename)
 	if err != nil {
 		return fmt.Errorf("couldn't read file %s\n%v", filename, err)
 	}
@@ -104,7 +104,7 @@ func splitToParentPath(path string) string {
 	return strings.Join(pathElements[:len(pathElements)-1], ".")
 }
 
-func readFile(filepath string) ([]byte, error) {
+func readInput(filepath string) ([]byte, error) {
 	jsonFile, err := os.Open(filepath)
 	if err != nil {
 		return nil, err
