@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"strings"
 
@@ -14,6 +15,7 @@ import (
 
 const flagParentPaths = "parent-paths"
 const flagFirstOnly = "first-only"
+const flagUseRegex = "use-regex"
 
 func main() {
 	app := &cli.App{
@@ -22,7 +24,7 @@ func main() {
 		UsageText:   "jf <valueToFind> <jsonFile>",
 		Version:     "1.0.3",
 		Description: "Search a JSON file for a specified value and output full paths of each occurrence found",
-		Action:      doSearch,
+		Action:      entrypoint,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:    flagParentPaths,
@@ -34,15 +36,20 @@ func main() {
 				Usage:   "Returns the first occurrence only",
 				Aliases: []string{"f"},
 			},
+			&cli.BoolFlag{
+				Name:    flagUseRegex,
+				Usage:   "Use pattern matching via regex expression",
+				Aliases: []string{"r"},
+			},
 		},
 	}
 
 	if err := app.Run(os.Args); err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 }
 
-func doSearch(c *cli.Context) error {
+func entrypoint(c *cli.Context) error {
 	if c.NArg() != 2 {
 		cli.ShowAppHelpAndExit(c, 1)
 	}
@@ -73,6 +80,7 @@ func doSearch(c *cli.Context) error {
 			fmt.Println(occurrence)
 		}
 		if c.Bool(flagFirstOnly) {
+			// exit early if the user only wants the first found path
 			return nil
 		}
 	}

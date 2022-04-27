@@ -2,6 +2,7 @@ package scout
 
 import (
 	"fmt"
+	"strings"
 )
 
 // Scout is the main type that handles the traversing of JSON paths.
@@ -9,6 +10,14 @@ type Scout struct {
 	data       any
 	found      []string
 	lookingFor string
+}
+
+// New instantiates and returns a Scout
+func New(lookingFor string, target any) Scout {
+	return Scout{
+		data:       target,
+		lookingFor: lookingFor,
+	}
 }
 
 // DoSearch searches the parsed JSON and returns an array of strings that correspond to
@@ -25,29 +34,20 @@ func (s *Scout) DoSearch() ([]string, error) {
 	return s.found, nil
 }
 
-// New instantiates and returns a Scout
-func New(lookingFor string, target any) Scout {
-	return Scout{
-		data:       target,
-		lookingFor: lookingFor,
-	}
-}
-
 func (s *Scout) parseMap(data map[string]any, path string) {
 	for key, val := range data {
-		keyPath := fmt.Sprintf("%s.%s", path, key)
+		keyPath := strings.Join([]string{path, key}, ".")
 		switch valData := val.(type) {
 		case map[string]any:
 			s.parseMap(val.(map[string]any), keyPath)
 		case []any:
 			s.parseArray(val.([]any), keyPath)
 		default:
-			if fmt.Sprintf("%v", valData) == s.lookingFor {
+			if s.isAMatch(fmt.Sprintf("%v", valData)) {
 				s.found = append(s.found, keyPath)
 			}
 		}
 	}
-	return
 }
 
 func (s *Scout) parseArray(anArray []any, path string) {
@@ -62,9 +62,13 @@ func (s *Scout) parseArray(anArray []any, path string) {
 		case []any:
 			s.parseArray(val.([]any), keyPath)
 		default:
-			if fmt.Sprintf("%v", valData) == s.lookingFor {
+			if s.isAMatch(fmt.Sprintf("%v", valData)) {
 				s.found = append(s.found, keyPath)
 			}
 		}
 	}
+}
+
+func (s *Scout) isAMatch(found string) bool {
+	return found == s.lookingFor
 }
