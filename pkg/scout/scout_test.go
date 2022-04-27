@@ -13,12 +13,12 @@ func TestScoutWithArray(t *testing.T) {
 	is := is.New(t)
 
 	t.Run("instantiation", func(t *testing.T) {
-		s := New("d", jsonArray())
+		s := New("d", jsonArray(), false)
 		is.Equal(reflect.TypeOf(s).String(), "scout.Scout")
 	})
 
 	t.Run("finds single values", func(t *testing.T) {
-		s := New("bar", jsonArray())
+		s := New("bar", jsonArray(), false)
 		found, err := s.DoSearch()
 		is.NoErr(err)
 
@@ -27,7 +27,7 @@ func TestScoutWithArray(t *testing.T) {
 	})
 
 	t.Run("finds multiple values", func(t *testing.T) {
-		s := New("c", jsonArray())
+		s := New("c", jsonArray(), false)
 		found, err := s.DoSearch()
 		is.NoErr(err)
 		sort.Strings(found)
@@ -42,12 +42,12 @@ func TestScoutWithMapping(t *testing.T) {
 	is := is.New(t)
 
 	t.Run("instantiation", func(t *testing.T) {
-		s := New("d", jsonMapping())
+		s := New("d", jsonMapping(), false)
 		is.Equal(reflect.TypeOf(s).String(), "scout.Scout")
 	})
 
 	t.Run("finds single values", func(t *testing.T) {
-		s := New("bar", jsonMapping())
+		s := New("bar", jsonMapping(), false)
 		found, err := s.DoSearch()
 		is.NoErr(err)
 
@@ -56,7 +56,7 @@ func TestScoutWithMapping(t *testing.T) {
 	})
 
 	t.Run("finds multiple values", func(t *testing.T) {
-		s := New("c", jsonMapping())
+		s := New("c", jsonMapping(), false)
 		found, err := s.DoSearch()
 		is.NoErr(err)
 		sort.Strings(found)

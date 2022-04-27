@@ -2,21 +2,24 @@ package scout
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 )
 
 // Scout is the main type that handles the traversing of JSON paths.
 type Scout struct {
-	data       any
-	found      []string
-	lookingFor string
+	data            any
+	found           []string
+	lookingFor      string
+	matchUsingRegex bool
 }
 
 // New instantiates and returns a Scout
-func New(lookingFor string, target any) Scout {
+func New(lookingFor string, target any, matchUsingRegex bool) Scout {
 	return Scout{
-		data:       target,
-		lookingFor: lookingFor,
+		data:            target,
+		lookingFor:      lookingFor,
+		matchUsingRegex: matchUsingRegex,
 	}
 }
 
@@ -70,5 +73,11 @@ func (s *Scout) parseArray(anArray []any, path string) {
 }
 
 func (s *Scout) isAMatch(found string) bool {
+	if s.matchUsingRegex {
+		re := regexp.MustCompile(s.lookingFor)
+		match := re.FindStringIndex(found)
+		return match != nil
+
+	}
 	return found == s.lookingFor
 }

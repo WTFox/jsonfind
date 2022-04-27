@@ -67,7 +67,7 @@ func entrypoint(c *cli.Context) error {
 		return fmt.Errorf("%v\njf was unable to parse the JSON file", err)
 	}
 
-	scout := scout.New(lookingFor, result)
+	scout := scout.New(lookingFor, result, c.Bool(flagUseRegex))
 	found, err := scout.DoSearch()
 	if err != nil {
 		return err
