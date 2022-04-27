@@ -67,7 +67,7 @@ func TestScoutWithMapping(t *testing.T) {
 	})
 }
 
-func jsonArray() []interface{} {
+func jsonArray() []any {
 	in := []byte(`
 	[{
 		"a": {"b": ["c", "x"]},
@@ -75,14 +75,14 @@ func jsonArray() []interface{} {
 		"baz": "c"
 	}]
 	`)
-	var raw []interface{}
+	var raw []any
 	if err := json.Unmarshal(in, &raw); err != nil {
 		panic(err)
 	}
 	return raw
 }
 
-func jsonMapping() map[string]interface{} {
+func jsonMapping() map[string]any {
 	in := []byte(`
 	{
 		"a": {"b": ["c", "x"]},
@@ -90,7 +90,7 @@ func jsonMapping() map[string]interface{} {
 		"baz": "c"
 	}
 	`)
-	var raw map[string]interface{}
+	var raw map[string]any
 	if err := json.Unmarshal(in, &raw); err != nil {
 		panic(err)
 	}

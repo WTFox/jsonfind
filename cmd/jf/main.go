@@ -55,7 +55,7 @@ func doSearch(c *cli.Context) error {
 		return fmt.Errorf("couldn't read file %s\n%v", filename, err)
 	}
 
-	var result interface{}
+	var result any
 	if err = json.Unmarshal(bytes, &result); err != nil {
 		return fmt.Errorf("%v\njf was unable to parse the JSON file", err)
 	}
