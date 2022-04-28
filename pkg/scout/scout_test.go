@@ -67,6 +67,24 @@ func TestScoutWithMapping(t *testing.T) {
 	})
 }
 
+func TestScoutWithRegex(t *testing.T) {
+	is := is.New(t)
+
+	t.Run("instantiation", func(t *testing.T) {
+		s := New("b.r", jsonMapping(), true)
+		is.Equal(reflect.TypeOf(s).String(), "scout.Scout")
+	})
+
+	t.Run("finds wildcard value", func(t *testing.T) {
+		s := New("b.r", jsonMapping(), true)
+		found, err := s.DoSearch()
+		is.NoErr(err)
+
+		is.Equal(len(found), 1)
+		is.Equal(found[0], ".foo")
+	})
+}
+
 func jsonArray() []any {
 	in := []byte(`
 	[{
