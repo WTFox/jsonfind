@@ -23,7 +23,30 @@ brew install jsonfind
 
 ![usage](./assets/usage.png)
 
-![help](./assets/help.png)
+```
+NAME:
+   jf - JSONFind
+
+USAGE:
+   jf <valueToFind> <jsonFile>
+
+VERSION:
+   1.1.0
+
+DESCRIPTION:
+   Search a JSON file for a specified value and output full paths of each occurrence found
+
+COMMANDS:
+   help, h  Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+   --parent-paths, -p  Renders the parent paths only (default: false)
+   --first-only, -f    Returns the first occurrence only (default: false)
+   --use-regex, -r     Use pattern matching via regex expression (default: false)
+   --help, -h          show help (default: false)
+   --version, -v       print the version (default: false)
+
+```
 
 ---
 
