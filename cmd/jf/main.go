@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -50,16 +51,12 @@ func main() {
 }
 
 func entrypoint(c *cli.Context) error {
-	if c.NArg() != 2 {
-		cli.ShowAppHelpAndExit(c, 1)
-	}
-
 	lookingFor := c.Args().Get(0)
 	filename := c.Args().Get(1)
 
 	bytes, err := readInput(filename)
 	if err != nil {
-		return fmt.Errorf("couldn't read file %s\n%v", filename, err)
+		cli.ShowAppHelpAndExit(c, 1)
 	}
 
 	var result any
@@ -104,7 +101,23 @@ func splitToParentPath(path string) string {
 	return strings.Join(pathElements[:len(pathElements)-1], ".")
 }
 
+func inputIsFromPipe() bool {
+	fileInfo, _ := os.Stdin.Stat()
+	return fileInfo.Mode()&os.ModeCharDevice == 0
+}
+
 func readInput(filepath string) ([]byte, error) {
+	if inputIsFromPipe() {
+		return ioutil.ReadAll(os.Stdin)
+	}
+	return readFromFile(filepath)
+}
+
+func readFromFile(filepath string) ([]byte, error) {
+	if filepath == "" {
+		return []byte{}, errors.New("no file provided")
+	}
+
 	jsonFile, err := os.Open(filepath)
 	if err != nil {
 		return nil, err
