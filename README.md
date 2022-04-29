@@ -12,9 +12,7 @@ A fast and lightweight utility to easily find paths to values in large JSON file
 ## Installation
 
 ```sh
-brew tap wtfox/tap
-
-brew install jsonfind
+brew install wtfox/tap/jsonfind
 ```
 
 ---
