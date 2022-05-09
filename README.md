@@ -5,7 +5,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/wtfox/jsonfind)](https://github.com/wtfox/jsonfind/stargazers)
 [![GitHub license](https://img.shields.io/github/license/wtfox/jsonfind)](https://github.com/wtfox/jsonfind/blob/master/LICENSE)
 
-A fast and lightweight utility to easily find paths to values in large JSON files.
+A fast and lightweight utility to easily find paths to values in JSON files.
 
 ---
 
@@ -21,7 +21,7 @@ brew install wtfox/tap/jsonfind
 
 ![usage](./assets/usage.png)
 
-```
+```text
 NAME:
    jf - JSONFind
 
