@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"regexp"
 	"strings"
 
 	"jsonfind/pkg/scout"
@@ -23,7 +24,7 @@ func main() {
 		Name:        "jf",
 		Usage:       "JSONFind",
 		UsageText:   "jf <valueToFind> <jsonFile>",
-		Version:     "1.1.0",
+		Version:     "1.1.1",
 		Description: "Search a JSON file for a specified value and output full paths of each occurrence found",
 		Action:      entrypoint,
 		Flags: []cli.Flag{
@@ -64,7 +65,14 @@ func entrypoint(c *cli.Context) error {
 		return fmt.Errorf("%v\njf was unable to parse the JSON file", err)
 	}
 
-	scout := scout.New(lookingFor, result, c.Bool(flagUseRegex))
+	useRegex := c.Bool(flagUseRegex)
+	if useRegex {
+		if _, err := regexp.Compile(lookingFor); err != nil {
+			return fmt.Errorf("regex search term is invalid: %v", lookingFor)
+		}
+	}
+
+	scout := scout.New(lookingFor, result, useRegex)
 	found, err := scout.DoSearch()
 	if err != nil {
 		return err
